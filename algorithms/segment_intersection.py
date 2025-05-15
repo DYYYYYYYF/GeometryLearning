@@ -1,4 +1,14 @@
+import pygame
+from visualization import *
 from geometry.primitives import Point, Segment
+from visualization.interaction import get_point_near_mouse
+
+# 初始两个线段
+segments = [
+    Segment(Point(100, 100), Point(300, 300)),
+    Segment(Point(100, 300), Point(300, 100))
+]
+dragging_point = None
 
 def cross(o, a, b):
     return (a.x - o.x)*(b.y - o.y) - (a.y - o.y)*(b.x - o.x)
@@ -26,4 +36,27 @@ def segment_intersection(seg1: Segment, seg2: Segment):
             return True, c
 
     return False, None
+
+def algorithm_impl(events):
+    global dragging_point
+    global segments
+
+    for event in events:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            dragging_point = get_point_near_mouse(event.pos, segments)
+        if event.type == pygame.MOUSEBUTTONUP:
+            dragging_point = None
+        if event.type == pygame.MOUSEMOTION and dragging_point:
+            dragging_point.x, dragging_point.y = event.pos
+
+    intersection = []
+    if len(segments) >= 2:
+        ok, pt = segment_intersection(segments[0], segments[1])
+        if ok and pt: intersection.append(pt)
+
+        renderer = get_renderer()
+        renderer.draw_scene(segments, intersection)
+
+
+
 
