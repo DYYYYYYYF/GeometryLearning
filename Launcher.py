@@ -27,10 +27,16 @@ if __name__ == "__main__":
                 if event.key == pygame.K_ESCAPE:
                     is_running = False
                     continue
+                if event.key == pygame.K_F1:
+                    current_algorithm = "segment_intersection"
+                    print("switch to segment_intersection algorithm")
+                if event.key == pygame.K_F2:
+                    current_algorithm = "convex_generate"
+                    print("switch to convex_generate algorithm")
 
         # 运行当前算法
         implement = get_algorithm(current_algorithm)
         if implement:
-            implement["run_algorithm"](evenets)
+            implement["algorithm_impl"](evenets)
 
     pygame.quit()

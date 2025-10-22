@@ -1,4 +1,5 @@
 import pygame
+from typing import Optional
 from visualization import *
 from geometry.primitives import Point, Segment
 from visualization.interaction import get_point_near_mouse
@@ -17,7 +18,7 @@ def on_segment(p1, p2, q):
     return (min(p1.x, p2.x) <= q.x <= max(p1.x, p2.x) and
             min(p1.y, p2.y) <= q.y <= max(p1.y, p2.y))
 
-def segment_intersection(seg1: Segment, seg2: Segment):
+def segment_intersection(seg1: Segment, seg2: Segment) -> tuple[bool, Optional[Point]]:
     p1, p2, q1, q2 = seg1.p1, seg1.p2, seg2.p1, seg2.p2
     d1 = cross(p1, p2, q1)
     d2 = cross(p1, p2, q2)
@@ -37,10 +38,12 @@ def segment_intersection(seg1: Segment, seg2: Segment):
 
     return False, None
 
-def algorithm_impl(events):
+def algorithm_impl_segment_intersection(events):
+    # 声明在第8行
     global dragging_point
     global segments
 
+    # 拖拽线段
     for event in events:
         if event.type == pygame.MOUSEBUTTONDOWN:
             dragging_point = get_point_near_mouse(event.pos, segments)
@@ -49,6 +52,7 @@ def algorithm_impl(events):
         if event.type == pygame.MOUSEMOTION and dragging_point:
             dragging_point.x, dragging_point.y = event.pos
 
+    # 运行算法
     intersection = []
     if len(segments) >= 2:
         ok, pt = segment_intersection(segments[0], segments[1])
