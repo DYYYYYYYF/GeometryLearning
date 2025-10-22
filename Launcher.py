@@ -1,3 +1,29 @@
+import subprocess
+import sys
+import threading
+
+# 用于安装库的函数
+def install(package, event):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    event.set()  # 安装完成后，设置事件标志为已完成
+
+# 检查并安装库的函数
+def check_and_install(package):
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"库 {package} 未安装，正在安装...")
+        install_event = threading.Event()  # 创建一个事件标志
+        install_thread = threading.Thread(target=install, args=(package, install_event))
+        install_thread.start()
+        
+        install_event.wait()  # 主线程阻塞，直到安装完成
+        print(f"库 {package} 安装完成！")
+    else:
+        print(f"库 {package} 已安装。")
+
+check_and_install("pygame")
+
 import pygame
 import sys
 from visualization import *
