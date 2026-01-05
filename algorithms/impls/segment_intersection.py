@@ -1,7 +1,7 @@
 import pygame
 from typing import Optional
 from visualization import *
-from .algorithm_base import algorithm_base
+from .interface.algorithm_base import algorithm_base
 from geometry.primitives import Point, Segment
 from visualization.interaction import get_point_near_mouse
 

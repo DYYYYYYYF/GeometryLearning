@@ -30,8 +30,17 @@ from visualization import *
 from algorithms.register import get_algorithm
 from ui.GUI import *
 
-def say_hello():
-    print("Clicked!")
+def algorithm_switch(event) -> str:
+    switched_algorithm = 'None'
+    if event.key == pygame.K_F1:
+        switched_algorithm = "segment_intersection"
+        print("switch to segment_intersection algorithm")
+    elif event.key == pygame.K_F2:
+        switched_algorithm = "convex_generate"
+        print("switch to convex_generate algorithm")
+    return switched_algorithm
+
+
 
 if __name__ == "__main__":
     # pygame
@@ -46,12 +55,6 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     is_running = True
     while is_running:
-        # 运行当前算法
-        implement = get_algorithm(current_algorithm)
-        if not implement:
-            print("Invalid algorithm impl.")
-            continue
-
         delta_time = clock.tick(60) / 1000.0
         events = pygame.event.get()
         for event in events:
@@ -62,12 +65,14 @@ if __name__ == "__main__":
                 if event.key == pygame.K_ESCAPE:
                     is_running = False
                     continue
-                if event.key == pygame.K_F1:
-                    current_algorithm = "segment_intersection"
-                    print("switch to segment_intersection algorithm")
-                if event.key == pygame.K_F2:
-                    current_algorithm = "convex_generate"
-                    print("switch to convex_generate algorithm")
+
+                current_algorithm = algorithm_switch(event)
+
+         # 运行当前算法
+        implement = get_algorithm(current_algorithm)
+        if not implement:
+            print("Invalid algorithm impl.")
+            continue
 
         # Events
         implement.handle_events(events)

@@ -1,5 +1,5 @@
-from .segment_intersection import algorithm_segment_intersection
-from .convex_generate import algorithm_convex_generate
+from .impls.segment_intersection import algorithm_segment_intersection
+from .impls.convex_generate import algorithm_convex_generate
 
 algorithm_segment_intersection_instance = None
 algorithm_convex_generate_instance = None

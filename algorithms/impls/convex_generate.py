@@ -1,6 +1,6 @@
 import pygame
 from visualization import *
-from .algorithm_base import algorithm_base
+from .interface.algorithm_base import algorithm_base
 from geometry.primitives import Point, Segment
 from ui.GUI import Text, Button, Panel
 from typing import Optional, cast
