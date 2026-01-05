@@ -67,6 +67,8 @@ class algorithm_convex_generate(algorithm_base):
     def init_ui(self):
         super().init_ui()
 
+        cast(Text, self.label).set_text('convex generate')
+
         # 按钮
         btn_width = self.panel_size[0]
         btn_height = 40

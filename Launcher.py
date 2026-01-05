@@ -30,6 +30,9 @@ from visualization import *
 from algorithms.register import get_algorithm
 from ui.GUI import *
 
+WIDTH = 1200
+HEIGHT = 800
+
 def algorithm_switch(event) -> str:
     switched_algorithm = 'None'
     if event.key == pygame.K_F1:
@@ -45,7 +48,7 @@ def algorithm_switch(event) -> str:
 if __name__ == "__main__":
     # pygame
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Compute Geometry Learning")
 
     current_algorithm = "segment_intersection"

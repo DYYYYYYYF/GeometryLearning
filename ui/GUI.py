@@ -17,7 +17,17 @@ class Text(UIElement):
         super().__init__(x, y, 0, 0)
         self.text = text
         self.color = color
-        self.font = pygame.font.SysFont('Arial', font_size)
+
+        try:
+            self.font = pygame.font.SysFont('Arial', font_size)
+        except FileNotFoundError:
+            self.font = pygame.font.SysFont(None, font_size)
+
+    def set_text(self, t):
+        self.text = t
+
+    def set_color(self, c):
+        self.color = c
 
     def draw(self, screen):
         text_surface = self.font.render(self.text, True, self.color)
