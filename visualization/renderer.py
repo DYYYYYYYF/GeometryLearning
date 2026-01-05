@@ -17,6 +17,9 @@ class Renderer:
         self.screen = screen
         self.background_color = (255, 255, 255)
 
+    def get_screen(self):
+        return self.screen
+
     def clear(self):
         self.screen.fill(self.background_color)
 
@@ -34,13 +37,19 @@ class Renderer:
                               [(int(p.x), int(p.y)) for p in points], width)
 
     def draw_scene(self, segments=None, points=None):
-        self.clear()
         if segments:
             for seg in segments:
                 self.draw_segment(seg)
         if points:
             for p in points:
                 self.draw_point(p, color=(0, 200, 0))
+
+    def draw_ui(self, elements):
+        for e in elements:
+            e.draw(self.screen)
+
+
+    def swap(self):
         pygame.display.flip()
 
 _renderer_instance = None

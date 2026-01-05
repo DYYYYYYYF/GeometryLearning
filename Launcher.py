@@ -28,10 +28,13 @@ import pygame
 import sys
 from visualization import *
 from algorithms.register import get_algorithm
+from ui.GUI import *
 
-implemented_algorithms = ["segment_intersection"]
+def say_hello():
+    print("Clicked!")
 
 if __name__ == "__main__":
+    # pygame
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("Compute Geometry Learning")
@@ -43,9 +46,15 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     is_running = True
     while is_running:
-        clock.tick(60)
-        evenets = pygame.event.get()
-        for event in evenets:
+        # 运行当前算法
+        implement = get_algorithm(current_algorithm)
+        if not implement:
+            print("Invalid algorithm impl.")
+            continue
+
+        delta_time = clock.tick(60) / 1000.0
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -60,9 +69,16 @@ if __name__ == "__main__":
                     current_algorithm = "convex_generate"
                     print("switch to convex_generate algorithm")
 
-        # 运行当前算法
-        implement = get_algorithm(current_algorithm)
-        if implement:
-            implement["algorithm_impl"](evenets)
+        # Events
+        implement.handle_events(events)
+
+        # begin
+        get_renderer().clear()
+
+        # cmd
+        implement.draw()
+
+        # end
+        get_renderer().swap()
 
     pygame.quit()

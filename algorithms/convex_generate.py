@@ -1,50 +1,77 @@
 import pygame
 from visualization import *
+from .algorithm_base import algorithm_base
 from geometry.primitives import Point, Segment
+from ui.GUI import Text, Button, Panel
+from typing import Optional, cast
 
-points=[]
-def convex_generate(points):
-    if len(points) <= 1:
-        return points
-    points = sorted(points, key=lambda p: (p.x, p.y))
+class algorithm_convex_generate(algorithm_base):
+    def __init__(self):
+        super().__init__()
 
-    def cross(o, a, b):
-        return (a.x - o.x)*(b.y - o.y) - (a.y - o.y)*(b.x - o.x)
+    def convex_generate(self):
+        if len(self.points) <= 1:
+            return self.points
+        self.points = sorted(self.points, key=lambda p: (p.x, p.y))
 
-    lower = []
-    for p in points:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
-            lower.pop()
-        lower.append(p)
+        def cross(o, a, b):
+            return (a.x - o.x)*(b.y - o.y) - (a.y - o.y)*(b.x - o.x)
 
-    upper = []
-    for p in reversed(points):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
-            upper.pop()
-        upper.append(p)
+        lower = []
+        for p in self.points:
+            while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+                lower.pop()
+            lower.append(p)
 
-    return lower[:-1] + upper[:-1]
+        upper = []
+        for p in reversed(self.points):
+            while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+                upper.pop()
+            upper.append(p)
 
-def generate_edges(points):
-    segments = []
-    if (len(points) < 2):
+        return lower[:-1] + upper[:-1]
+
+    def generate_edges(self):
+        segments = []
+        if (len(self.points) < 2):
+            return segments
+        
+        for p1, p2 in zip(self.points, self.points[1:]):
+            segments.append(Segment(p1, p2))
+        
+        segments.append(Segment(self.points[0], self.points[-1]))
         return segments
     
-    for p1, p2 in zip(points, points[1:]):
-        segments.append(Segment(p1, p2))
-    
-    segments.append(Segment(points[0], points[-1]))
-    return segments
+    def handle_events(self, events):
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if x < self.panel_location[0]:
+                    self.add_point(Point(x, y))
 
-def algorithm_impl_convex_generate(events):
-    global points
+            # 转换_btn为Button类型
+            cast(Button, self._btn).handle_event(event)
 
-    # 自定义点集
-    for event in events:
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x, y = event.pos
-            points.append(Point(x, y))
+    def algorithm_impl(self):
+        self.points = self.convex_generate()
+        self.lines = self.generate_edges()
 
-    points = convex_generate(points)
-    segments = generate_edges(points)
-    get_renderer().draw_scene(segments, points)
+
+    def draw(self):
+        super().draw()
+
+        self.algorithm_impl()
+        get_renderer().draw_scene(self.lines, self.points)
+
+    _btn : Optional[Button] = None
+    def init_ui(self):
+        super().init_ui()
+
+        # 按钮
+        btn_width = self.panel_size[0]
+        btn_height = 40
+        self._btn = Button(0, self.panel_size[1] - btn_height, btn_width, btn_height, "Reset", lambda: self.points.clear())
+
+        # 绑定
+        P = cast(Panel, self.panel)
+        P.add_child(self._btn)
