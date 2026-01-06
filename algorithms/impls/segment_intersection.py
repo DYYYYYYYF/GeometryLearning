@@ -48,15 +48,13 @@ class algorithm_segment_intersection(algorithm_base):
 
         return False, None
 
-    def handle_events(self, events):
-        # 拖拽线段
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self._dragging_point = get_point_near_mouse(event.pos, self.lines)
-            if event.type == pygame.MOUSEBUTTONUP:
-                self._dragging_point = None
-            if event.type == pygame.MOUSEMOTION and self._dragging_point:
-                self._dragging_point.x, self._dragging_point.y = event.pos
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self._dragging_point = get_point_near_mouse(event.pos, self.lines)
+        if event.type == pygame.MOUSEBUTTONUP:
+            self._dragging_point = None
+        if event.type == pygame.MOUSEMOTION and self._dragging_point:
+            self._dragging_point.x, self._dragging_point.y = event.pos
 
     def algorithm_impl(self):
         # 重置交点

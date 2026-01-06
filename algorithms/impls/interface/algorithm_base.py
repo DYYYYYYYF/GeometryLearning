@@ -26,8 +26,16 @@ class algorithm_base:
     def algorithm_impl(self):
         pass
 
-    # 处理事件
+    # 处理事件-仅分发
     def handle_events(self, events):
+        for event in events:
+            self.handle_event(event)
+
+            # 转换_btn为Button类型
+            cast(Button, self.reset_btn).handle_event(event)
+
+    # 子类覆写实现不同处理
+    def handle_event(self, event):
         pass
 
     # 处理绘制

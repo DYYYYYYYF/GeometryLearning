@@ -42,15 +42,11 @@ class algorithm_convex_generate(algorithm_base):
         segments.append(Segment(self.points[0], self.points[-1]))
         return segments
     
-    def handle_events(self, events):
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                if x < self.panel_location[0]:
-                    self.add_point(Point(x, y))
-
-            # 转换_btn为Button类型
-            cast(Button, self.reset_btn).handle_event(event)
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            if x < self.panel_location[0]:
+                self.add_point(Point(x, y))
 
     def algorithm_impl(self):
         self.points = self.convex_generate()
