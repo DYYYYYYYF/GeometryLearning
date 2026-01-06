@@ -24,6 +24,10 @@ class algorithm_segment_intersection(algorithm_base):
 
         cast(Text, self.label).set_text('Segment intersection')
 
+        # 文本
+        self.info_text_1 = Text(0, 40,  ' - drag segment end point.', 18)
+        cast(Panel, self.panel).add_child(self.info_text_1)
+
     def on_segment(self, p1, p2, q):
         return (min(p1.x, p2.x) <= q.x <= max(p1.x, p2.x) and
                 min(p1.y, p2.y) <= q.y <= max(p1.y, p2.y))

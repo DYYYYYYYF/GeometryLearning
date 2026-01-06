@@ -66,3 +66,7 @@ class algorithm_convex_generate(algorithm_base):
         cast(Text, self.label).set_text('convex generate')
         cast(Button, self.reset_btn).set_callback(lambda: self.points.clear())
 
+        # 子类新内容
+        self.info_text_1 = Text(0, 40,  ' - click for add point.', 18)
+        cast(Panel, self.panel).add_child(self.info_text_1)
+
