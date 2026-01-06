@@ -26,9 +26,9 @@ check_and_install("pygame")
 
 import pygame
 import sys
+from ui import *
 from visualization import *
 from algorithms.register import get_algorithm
-from ui import *
 
 WIDTH = 1200
 HEIGHT = 800
@@ -45,7 +45,6 @@ def algorithm_switch(event) -> str:
         switched_algorithm = "rasterization"
         print("switch to rasterization algorithm")
     return switched_algorithm
-
 
 
 if __name__ == "__main__":
@@ -77,7 +76,6 @@ if __name__ == "__main__":
          # 运行当前算法
         implement = get_algorithm(current_algorithm)
         if not implement:
-            print("Invalid algorithm impl.")
             continue
 
         # Events

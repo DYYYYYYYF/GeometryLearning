@@ -1,14 +1,11 @@
 import pygame
-from typing import Optional, cast
+from ui import *
 from visualization import *
-from .interface.algorithm_base import algorithm_base
+from typing import Optional, cast
 from geometry.primitives import Point, Segment
 from visualization.interaction import get_point_near_mouse
-from ui import *
-
-# 向量叉乘
-def cross(o, a, b):
-    return (a.x - o.x)*(b.y - o.y) - (a.y - o.y)*(b.x - o.x)
+from algorithms.interface.algorithm_base import algorithm_base
+from algorithms.impls.segment_intersection_core import segment_intersection_impl
 
 class algorithm_segment_intersection(algorithm_base):
     _dragging_point = None
@@ -28,30 +25,6 @@ class algorithm_segment_intersection(algorithm_base):
         self.info_text_1 = Text(0, 40,  ' - drag segment end point.', 18)
         cast(Panel, self.panel).add_child(self.info_text_1)
 
-    def on_segment(self, p1, p2, q):
-        return (min(p1.x, p2.x) <= q.x <= max(p1.x, p2.x) and
-                min(p1.y, p2.y) <= q.y <= max(p1.y, p2.y))
-
-    def segment_intersection(self, seg1: Segment, seg2: Segment) -> tuple[bool, Optional[Point]]:
-        p1, p2, q1, q2 = seg1.p1, seg1.p2, seg2.p1, seg2.p2
-        d1 = cross(p1, p2, q1)
-        d2 = cross(p1, p2, q2)
-        d3 = cross(q1, q2, p1)
-        d4 = cross(q1, q2, p2)
-
-        if d1 * d2 < 0 and d3 * d4 < 0:
-            denom = (p1.x - p2.x) * (q1.y - q2.y) - (p1.y - p2.y) * (q1.x - q2.x)
-            if denom == 0: return True, None
-            x = ((p1.x*p2.y - p1.y*p2.x)*(q1.x - q2.x) - (p1.x - p2.x)*(q1.x*q2.y - q1.y*q2.x)) / denom
-            y = ((p1.x*p2.y - p1.y*p2.x)*(q1.y - q2.y) - (p1.y - p2.y)*(q1.x*q2.y - q1.y*q2.x)) / denom
-            return True, Point(x, y)
-
-        for a, b, c in [(p1, p2, q1), (p1, p2, q2), (q1, q2, p1), (q1, q2, p2)]:
-            if cross(a, b, c) == 0 and self.on_segment(a, b, c):
-                return True, c
-
-        return False, None
-
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self._dragging_point = get_point_near_mouse(event.pos, self.lines)
@@ -64,7 +37,7 @@ class algorithm_segment_intersection(algorithm_base):
         # 重置交点
         self.points = []
 
-        ok, pt = self.segment_intersection(self.lines[0], self.lines[1])
+        ok, pt = segment_intersection_impl(self.lines[0], self.lines[1])
         if ok and pt: self.points.append(pt)
 
     def draw(self):

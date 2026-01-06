@@ -1,6 +1,6 @@
-from .impls.segment_intersection import algorithm_segment_intersection
-from .impls.convex_generate import algorithm_convex_generate
-from .impls.rasterization import algorithm_rasterization
+from .layouts.segment_intersection import algorithm_segment_intersection
+from .layouts.convex_generate import algorithm_convex_generate
+from .layouts.rasterization import algorithm_rasterization
 
 algorithm_segment_intersection_instance = None
 algorithm_convex_generate_instance = None

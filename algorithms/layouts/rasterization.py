@@ -1,8 +1,9 @@
 import pygame
-from geometry.primitives import Point, Segment
-from .interface.algorithm_base import algorithm_base
 from ui import *
 from visualization import *
+from geometry.primitives import Point, Segment
+from algorithms.interface.algorithm_base import algorithm_base
+from algorithms.impls.rasterization_core import rasterization_impl
 from typing import cast
 
 class algorithm_rasterization(algorithm_base):
@@ -47,13 +48,24 @@ class algorithm_rasterization(algorithm_base):
                     self.triangle_points.append(Point(gx, gy))
                     
                 if len(self.triangle_points) == 3:
-                    if self.info_text_1: self.info_text_1.set_text("Rasterizing...")
-                    self.filled_pixels.clear()
+                    if self.info_text_1: self.info_text_1.set_text(" - Status: Rasterizing...")
+                    if self.filled_pixels: self.filled_pixels.clear()
                     self.algorithm_impl()
 
     def algorithm_impl(self):
-        pass
+        self.filled_pixels = rasterization_impl(self.triangle_points)
 
+        # 更新 UI 信息
+        A = self.triangle_points[0]
+        B = self.triangle_points[1]
+        C = self.triangle_points[2]
+
+        self.info_text_1.set_text(
+            f"Vertices: \n({A.x},{A.y}), ({B.x},{B.y}), ({C.x},{C.y})\n"
+            f"Pixels Filled: {len(self.filled_pixels or [])}\n"
+            "Status: Done"
+        )
+       
     def draw(self):
         renderer = get_renderer()
         
@@ -61,7 +73,14 @@ class algorithm_rasterization(algorithm_base):
         renderer.draw_grid(self.grid_cols, self.grid_rows, self.grid_size)
         
         # 2. 绘制已填充的“像素”
+        if self.filled_pixels is None or []:
+            return
+
         for (gx, gy) in self.filled_pixels:
+            # 限制在网格边界内
+            gx = max(0, min(self.grid_cols - 1, gx))
+            gy = max(0, min(self.grid_rows - 1, gy))
+
             renderer.draw_rect(
                 gx * self.grid_size, 
                 gy * self.grid_size, 
@@ -90,6 +109,6 @@ class algorithm_rasterization(algorithm_base):
 
     def reset(self):
         self.triangle_points = []
-        self.filled_pixels.clear()
+        if self.filled_pixels: self.filled_pixels.clear()
         if self.info_text_1:
-            self.info_text_1.set_text("Click 3 points to form a triangle")
+            self.info_text_1.set_text(" - Click 3 points to form a triangle")
