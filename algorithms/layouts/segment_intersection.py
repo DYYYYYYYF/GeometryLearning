@@ -13,17 +13,21 @@ class algorithm_segment_intersection(algorithm_base):
     def __init__(self):
         super().__init__()
 
-        # 初始两个线段
-        self.lines = [
-            Segment(Point(200, 200), Point(700, 600)),
-            Segment(Point(200, 600), Point(700, 200))
-        ]
+        def reset():
+            # 初始两个线段
+            self.lines = [
+                Segment(Point(200, 200), Point(700, 600)),
+                Segment(Point(200, 600), Point(700, 200))
+            ]
 
+        reset()
         cast(Text, self.label).set_text('Segment intersection')
 
         # 文本
         self.info_text_1 = Text(0, 40,  ' - drag segment end point.', 18)
         cast(Panel, self.panel).add_child(self.info_text_1)
+
+        self.set_reset_callback(reset)
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
