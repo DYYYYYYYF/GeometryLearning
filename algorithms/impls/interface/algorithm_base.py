@@ -1,7 +1,7 @@
 from visualization import *
 from geometry.primitives import Point, Segment
 from typing import Optional, cast
-from ui.GUI import Text, Panel
+from ui import * 
 
 class algorithm_base:
     def __init__(self):
@@ -9,6 +9,7 @@ class algorithm_base:
         self.lines = []
         self.panel : Optional[Panel] = None
         self.label : Optional[Text] = None 
+        self.reset_btn : Optional[Button] = None
 
         self.panel_size = [0.2, 1.0]    # Penel占比
         self.panel_location = []
@@ -42,6 +43,15 @@ class algorithm_base:
 
         self.label = Text(0, 0, '')
         self.panel.add_child(self.label)
+
+        # 按钮
+        btn_width = self.panel_size[0]
+        btn_height = 40
+        self.reset_btn = Button(0, self.panel_size[1] - btn_height, btn_width, btn_height, "Reset")
+
+        # 绑定
+        P = cast(Panel, self.panel)
+        P.add_child(self.reset_btn)
 
 
     # 绘制UI

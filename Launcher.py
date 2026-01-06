@@ -28,7 +28,7 @@ import pygame
 import sys
 from visualization import *
 from algorithms.register import get_algorithm
-from ui.GUI import *
+from ui import *
 
 WIDTH = 1200
 HEIGHT = 800

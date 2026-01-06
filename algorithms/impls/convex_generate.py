@@ -2,7 +2,7 @@ import pygame
 from visualization import *
 from .interface.algorithm_base import algorithm_base
 from geometry.primitives import Point, Segment
-from ui.GUI import Text, Button, Panel
+from ui import *
 from typing import Optional, cast
 
 class algorithm_convex_generate(algorithm_base):
@@ -50,7 +50,7 @@ class algorithm_convex_generate(algorithm_base):
                     self.add_point(Point(x, y))
 
             # 转换_btn为Button类型
-            cast(Button, self._btn).handle_event(event)
+            cast(Button, self.reset_btn).handle_event(event)
 
     def algorithm_impl(self):
         self.points = self.convex_generate()
@@ -68,12 +68,5 @@ class algorithm_convex_generate(algorithm_base):
         super().init_ui()
 
         cast(Text, self.label).set_text('convex generate')
+        cast(Button, self.reset_btn).set_callback(lambda: self.points.clear())
 
-        # 按钮
-        btn_width = self.panel_size[0]
-        btn_height = 40
-        self._btn = Button(0, self.panel_size[1] - btn_height, btn_width, btn_height, "Reset", lambda: self.points.clear())
-
-        # 绑定
-        P = cast(Panel, self.panel)
-        P.add_child(self._btn)

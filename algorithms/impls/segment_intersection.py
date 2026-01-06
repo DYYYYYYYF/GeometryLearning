@@ -1,9 +1,10 @@
 import pygame
-from typing import Optional
+from typing import Optional, cast
 from visualization import *
 from .interface.algorithm_base import algorithm_base
 from geometry.primitives import Point, Segment
 from visualization.interaction import get_point_near_mouse
+from ui import *
 
 # 向量叉乘
 def cross(o, a, b):
@@ -17,9 +18,11 @@ class algorithm_segment_intersection(algorithm_base):
 
         # 初始两个线段
         self.lines = [
-            Segment(Point(100, 100), Point(300, 300)),
-            Segment(Point(100, 300), Point(300, 100))
+            Segment(Point(200, 200), Point(700, 600)),
+            Segment(Point(200, 600), Point(700, 200))
         ]
+
+        cast(Text, self.label).set_text('Segment intersection')
 
     def on_segment(self, p1, p2, q):
         return (min(p1.x, p2.x) <= q.x <= max(p1.x, p2.x) and
