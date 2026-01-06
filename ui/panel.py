@@ -1,7 +1,7 @@
 import pygame
 from .base import UIElement
 
-# 视窗
+# --- 视窗 ---
 class Panel(UIElement):
     def __init__(self, x, y, width, height, color=(50, 50, 50)):
         super().__init__(x, y, width, height)

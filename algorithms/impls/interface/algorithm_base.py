@@ -38,6 +38,12 @@ class algorithm_base:
     def handle_event(self, event):
         pass
 
+    def set_label(self, text):
+        cast(Text, self.label).set_text(text)
+
+    def set_reset_callback(self, callback):
+        cast(Button, self.reset_btn).set_callback(callback)
+
     # 处理绘制
     def draw(self):
         self.draw_ui()
@@ -49,7 +55,8 @@ class algorithm_base:
         self.panel_location = [screen_width - self.panel_size[0], screen_height - self.panel_size[1]]
         self.panel = Panel(self.panel_location[0], self.panel_location[1], self.panel_size[0], self.panel_size[1])
 
-        self.label = Text(0, 0, '')
+        self.label = Text(0, 0, '', 20)
+        self.label.set_wrap(True, self.panel_size[1])
         self.panel.add_child(self.label)
 
         # 按钮

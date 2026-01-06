@@ -41,6 +41,9 @@ def algorithm_switch(event) -> str:
     elif event.key == pygame.K_F2:
         switched_algorithm = "convex_generate"
         print("switch to convex_generate algorithm")
+    elif event.key == pygame.K_F3:
+        switched_algorithm = "rasterization"
+        print("switch to rasterization algorithm")
     return switched_algorithm
 
 
