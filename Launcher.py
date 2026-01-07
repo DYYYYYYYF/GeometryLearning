@@ -73,7 +73,8 @@ if __name__ == "__main__":
 
                 current_algorithm = algorithm_switch(event)
 
-         # 运行当前算法
+        # 运行当前算法
+        if current_algorithm == 'None': continue
         implement = get_algorithm(current_algorithm)
         if not implement:
             continue
